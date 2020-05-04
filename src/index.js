@@ -1,6 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App";
-import "sanitize.css";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunk from "redux-thunk";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+import reducers from "./redux/reducers";
+import App from "./components/App";
+
+import "sanitize.css";
+import "sanitize.css/typography.css";
+
+ReactDOM.render(
+	<Provider store={createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))}>
+		<App />
+	</Provider>,
+	document.getElementById("root")
+);
