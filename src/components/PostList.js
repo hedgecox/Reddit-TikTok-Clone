@@ -8,7 +8,7 @@ import Loading from "./Loading";
 const PostContainer = styled.div`
 	scroll-snap-type: y mandatory;
 	overflow-y: scroll;
-	height: 100vh;
+	height: ${(props) => props.height}px;
 `;
 
 const PostList = () => {
@@ -51,7 +51,7 @@ const PostList = () => {
 
 	//console.log(items.data.children);
 	return (
-		<PostContainer onScroll={debounce(scrollStop, 80)} ref={postContainerRef}>
+		<PostContainer onScroll={debounce(scrollStop, 80)} ref={postContainerRef} height={height}>
 			{items.data.children
 				.filter((i) => i.data.post_hint === "image")
 				.map(({ kind, data: { id, title, thumbnail, url, ups, num_comments } }) => {
