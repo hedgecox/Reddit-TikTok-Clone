@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const PostWrap = styled.div`
-	height: 100vh;
+	height: ${(props) => props.height}px;
 	scroll-snap-align: start;
 	position: relative;
 	display: flex;
@@ -58,7 +58,7 @@ const kFormatter = (num) => {
 
 const Post = ({ id, thumbnail, title, url, ups, num_comments }) => {
 	return (
-		<PostWrap>
+		<PostWrap height={window.innerHeight}>
 			<Thumbnail src={thumbnail} alt={title} />
 			<PostImage src={url} alt={title} />
 			<Ups>
