@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import debounce from "lodash.debounce";
+import { connect } from "react-redux";
 
 import Post from "./Post";
 import Loading from "./Loading";
+import { getPosts } from "../redux/actions";
 
 const PostContainer = styled.div`
 	scroll-snap-type: y mandatory;
@@ -11,17 +13,12 @@ const PostContainer = styled.div`
 	height: ${(props) => props.height}px;
 `;
 
-const PostList = () => {
+const PostList = ({ getPosts, Posts, Sub = "EarthPorn" }) => {
 	const postContainerRef = useRef(null);
-	const [items, setItems] = useState([]);
 	const [height, setHeight] = useState(window.innerHeight);
 
 	useEffect(() => {
-		fetch("https://www.reddit.com/r/EarthPorn/hot.json?limit=10")
-			.then((res) => res.json())
-			.then((data) => {
-				setItems(data);
-			});
+		getPosts(Sub);
 
 		const handleResize = debounce(() => {
 			setHeight(window.innerHeight);
@@ -29,9 +26,9 @@ const PostList = () => {
 
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
-	}, []);
+	}, [getPosts, Sub]);
 
-	if (!items.data) {
+	if (!Posts[Sub]) {
 		return (
 			<PostContainer height={height}>
 				<Loading />
@@ -40,25 +37,39 @@ const PostList = () => {
 	}
 
 	const scrollStop = () => {
-		const { scrollTopMax, scrollTop, clientHeight } = postContainerRef.current;
-		console.log("scrollHeight", scrollTopMax);
+		console.log("StopScroll");
+
+		const { scrollTopMax, scrollTop, clientHeight, scrollHeight } = postContainerRef.current;
+		console.log("ScrollTopMax", scrollTopMax);
+		console.log("scrollHeight", scrollHeight); //Have to use this instead of scrollTopMax
 		console.log("SCrollTop", scrollTop);
 		console.log("clientHeight:", clientHeight);
+		console.log(postContainerRef.current);
 
-		console.log("Currently On:", scrollTop / clientHeight);
-		console.log("ItemsLeft:", (scrollTopMax - scrollTop) / clientHeight);
+		//console.log("Currently On:", scrollTop / clientHeight);
+
+		const itemsLeft = (scrollTopMax - scrollTop) / clientHeight;
+		if (itemsLeft < 6) {
+			console.log("need more items");
+		}
 	};
 
 	//console.log(items.data.children);
 	return (
-		<PostContainer onScroll={debounce(scrollStop, 80)} ref={postContainerRef} height={height}>
-			{items.data.children
+		<PostContainer onScroll={debounce(scrollStop, 120)} ref={postContainerRef} height={height}>
+			{Posts[Sub].children
 				.filter((i) => i.data.post_hint === "image")
-				.map(({ kind, data: { id, title, thumbnail, url, ups, num_comments } }) => {
+				.map(({ data: { id, title, thumbnail, url, ups, num_comments } }) => {
 					return <Post key={id} title={title} thumbnail={thumbnail} url={url} ups={ups} num_comments={num_comments} />;
 				})}
 		</PostContainer>
 	);
 };
 
-export default PostList;
+const mapStateToProps = (state) => {
+	return {
+		Posts: state.Posts,
+	};
+};
+
+export default connect(mapStateToProps, { getPosts })(PostList);
