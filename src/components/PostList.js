@@ -12,22 +12,28 @@ const PostContainer = styled.div`
 `;
 
 const PostList = () => {
-	// http://web.uforio.com/#r/cat
 	const postContainerRef = useRef(null);
-	const [items, SetItems] = useState([]);
-	console.log("Postlist Loaded");
+	const [items, setItems] = useState([]);
+	const [height, setHeight] = useState(window.innerHeight);
 
 	useEffect(() => {
 		fetch("https://www.reddit.com/r/EarthPorn/hot.json?limit=10")
 			.then((res) => res.json())
 			.then((data) => {
-				SetItems(data);
+				setItems(data);
 			});
+
+		const handleResize = debounce(() => {
+			setHeight(window.innerHeight);
+		}, 500);
+
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	if (!items.data) {
 		return (
-			<PostContainer>
+			<PostContainer height={height}>
 				<Loading />
 			</PostContainer>
 		);
@@ -43,7 +49,7 @@ const PostList = () => {
 		console.log("ItemsLeft:", (scrollTopMax - scrollTop) / clientHeight);
 	};
 
-	console.log(items.data.children);
+	//console.log(items.data.children);
 	return (
 		<PostContainer onScroll={debounce(scrollStop, 80)} ref={postContainerRef}>
 			{items.data.children
