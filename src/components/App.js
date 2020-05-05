@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Nav from "./Nav";
 import PostList from "./PostList";
+import Discover from "./Discover";
 
 const App = () => {
 	console.log("App Loaded");
@@ -9,8 +10,8 @@ const App = () => {
 	return (
 		<Router>
 			<Switch>
-				<Route path="/discover" exact={true} component={() => <p>Discover</p>} />
-				<Route path="/r/:sub" component={() => <p>Sub</p>} />
+				<Route path="/discover" exact={true} component={Discover} />
+				<Route path="/r/:sub" component={PostList} />
 				<Route component={PostList} />
 			</Switch>
 

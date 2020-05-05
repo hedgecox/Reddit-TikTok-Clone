@@ -8,6 +8,7 @@ const LoadingContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	scroll-snap-align: start;
 `;
 
 const LoadingImage = styled.img`
