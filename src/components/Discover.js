@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import debounce from "lodash.debounce";
 import RandomItem from "../utils/RandomItem";
+import { connect } from "react-redux";
+import { getSubs } from "../redux/actions";
 
 const DiscoverContainer = styled.div`
 	padding: 0 10px;
@@ -58,14 +61,24 @@ const SearchBox = styled.input`
 const Topics = ["Art", "Sketchpad", "Cats", "Pic", "SkyPorn", "AstroPhotography", "itookapicture", "Pics", "ArtJunkie"];
 const TopicColours = ["#edcc68", "#ed8368", "#6892ed", "#be68ed", "#a1d676", "#d77ed9", "#cc6060", "#56b06e", "#379472", "#e3dd3b"];
 
-const Discover = () => {
+const Discover = ({ getSubs, Subs }) => {
 	const [searchQ, setSearchQ] = useState("");
 	const FilteredTopics = Topics.filter((i) => i.toLowerCase().indexOf(searchQ.toLowerCase()) > -1);
+
+	const SearchOnChange = (e) => {
+		setSearchQ(e.target.value.replace(/[\W]+/, ""));
+	};
+
+	//Search for subReddits on searchQ change
+	const debouncedRequest = useRef(debounce(getSubs, 500)).current;
+	useEffect(() => {
+		if (searchQ) debouncedRequest(searchQ);
+	}, [searchQ, debouncedRequest]);
 
 	return (
 		<DiscoverContainer>
 			<DiscoverTitle>Topics</DiscoverTitle>
-			<SearchBox placeholder="Search or Enter Sub name" value={searchQ} onChange={(e) => setSearchQ(e.target.value.replace(/[\W_]+/, ""))} />
+			<SearchBox placeholder="Search or Enter Sub name" value={searchQ} onChange={SearchOnChange} />
 			{FilteredTopics.map((i, ind) => {
 				return (
 					<Topic key={ind} to={`/r/${i}`}>
@@ -75,14 +88,24 @@ const Discover = () => {
 				);
 			})}
 
-			{searchQ && (
-				<Topic to={`/r/${searchQ}`}>
-					<SubIcon color={RandomItem(TopicColours)}>?</SubIcon>
-					{searchQ}
-				</Topic>
-			)}
+			{Subs &&
+				searchQ &&
+				Subs.map(({ data }) => {
+					return (
+						<Topic to={`/r/${data.display_name}`} key={data.id}>
+							<SubIcon color={RandomItem(TopicColours)}>#</SubIcon>
+							{data.display_name}
+						</Topic>
+					);
+				})}
 		</DiscoverContainer>
 	);
 };
 
-export default Discover;
+const mapStateToProps = (state) => {
+	return {
+		Subs: state.Subs,
+	};
+};
+
+export default connect(mapStateToProps, { getSubs })(Discover);

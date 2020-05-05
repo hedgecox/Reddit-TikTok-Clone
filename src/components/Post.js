@@ -51,6 +51,7 @@ const Icon = styled.svg`
 	font-size: 50px;
 	height: 1em;
 	width: 1em;
+	filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
 `;
 
 const kFormatter = (num) => {

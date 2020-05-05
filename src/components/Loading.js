@@ -11,14 +11,26 @@ const LoadingContainer = styled.div`
 	scroll-snap-align: start;
 `;
 
+const Error = styled.div`
+	position: absolute;
+	bottom: 60px;
+	background-color: #fdecea;
+	color: #611a15;
+	left: 8px;
+	right: 8px;
+	padding: 10px;
+	border-radius: 6px;
+`;
+
 const LoadingImage = styled.img`
 	max-width: 100%;
 `;
 
-const Loading = () => {
+const Loading = ({ error }) => {
 	return (
 		<LoadingContainer>
 			<LoadingImage src="/loader.gif" alt="Loading..." />
+			{error && <Error>{error}</Error>}
 		</LoadingContainer>
 	);
 };

@@ -13,17 +13,6 @@ const PostContainer = styled.div`
 	height: ${(props) => props.height}px;
 `;
 
-const Error = styled.div`
-	position: absolute;
-	bottom: 60px;
-	background-color: #fdecea;
-	color: #611a15;
-	left: 8px;
-	right: 8px;
-	padding: 10px;
-	border-radius: 6px;
-`;
-
 const PostList = (props) => {
 	const Sub = props.match.params.sub || "EarthPorn";
 	const { getPosts, Posts } = props;
@@ -46,8 +35,7 @@ const PostList = (props) => {
 	if (!Posts[Sub]) {
 		return (
 			<PostContainer height={height}>
-				<Loading />
-				{Posts._error && <Error>{Posts._error}</Error>}
+				<Loading error={Posts._error} />
 			</PostContainer>
 		);
 	}
@@ -64,13 +52,21 @@ const PostList = (props) => {
 		}
 	};
 
+	const FilteredPosts = Posts[Sub].children.filter((i) => i.data.post_hint === "image");
+
+	if (!FilteredPosts.length) {
+		return (
+			<PostContainer height={height}>
+				<Loading error={`Sorry, the SubReddit '${Sub}' doesn't seem to have very many pictures`} />
+			</PostContainer>
+		);
+	}
+
 	return (
 		<PostContainer onScroll={debounce(scrollStop, 200)} ref={postContainerRef} height={height}>
-			{Posts[Sub].children
-				.filter((i) => i.data.post_hint === "image")
-				.map(({ data: { id, title, thumbnail, url, ups, num_comments } }) => {
-					return <Post key={id} title={title} thumbnail={thumbnail} url={url} ups={ups} num_comments={num_comments} />;
-				})}
+			{FilteredPosts.map(({ data: { id, title, thumbnail, url, ups, num_comments } }) => {
+				return <Post key={id} title={title} thumbnail={thumbnail} url={url} ups={ups} num_comments={num_comments} />;
+			})}
 			<Loading />
 		</PostContainer>
 	);

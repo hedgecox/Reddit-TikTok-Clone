@@ -15,3 +15,14 @@ export const getPosts = (sub, after) => {
 			});
 	};
 };
+
+export const getSubs = (query) => {
+	return async (dispatch) => {
+		fetch(`https://www.reddit.com/r/all/search.json?type=sr&q=${query}&limit=15`)
+			.then((res) => res.json())
+			.then((data) => {
+				dispatch({ type: "GOT_SUBS", payload: data.data.children });
+			})
+			.catch(() => {});
+	};
+};

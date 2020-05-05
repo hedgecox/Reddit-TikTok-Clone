@@ -18,4 +18,13 @@ const Posts = (state = { _loading: false, _error: "" }, action) => {
 	}
 };
 
-export default combineReducers({ Posts });
+const Subs = (state = [], action) => {
+	switch (action.type) {
+		case "GOT_SUBS":
+			return action.payload;
+		default:
+			return state;
+	}
+};
+
+export default combineReducers({ Posts, Subs });

@@ -36,6 +36,7 @@ const NavItem = styled.div`
 	text-decoration: none;
 	margin: 0 15px;
 	transition: transform 0.05s;
+	text-shadow: ${(props) => (props.light ? "1px 1px 2px rgba(0, 0, 0, 0.8)" : "none")}
 
 	&:active {
 		transform: scale(0.8);
@@ -46,6 +47,7 @@ const Icon = styled.svg`
 	font-size: 32px;
 	height: 1em;
 	width: 1em;
+	filter: ${(props) => (props.light ? "drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8))" : "none")};
 `;
 
 const Nav = ({ light }) => {
@@ -53,7 +55,7 @@ const Nav = ({ light }) => {
 		<NavContainer light={light}>
 			<StyledLink to="/">
 				<NavItem light={light}>
-					<Icon focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
+					<Icon light={light} focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation">
 						<path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
 					</Icon>
 					Home
