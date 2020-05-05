@@ -1,7 +1,7 @@
 export const getPosts = (sub, after) => {
 	return async (dispatch, getState) => {
 		//Return Early if already Requesting
-		if (getState().Posts._loading) return;
+		if (getState().Posts._loading || getState().Posts._error) return;
 
 		dispatch({ type: "GET_POSTS" });
 

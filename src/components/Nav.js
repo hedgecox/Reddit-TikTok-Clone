@@ -9,7 +9,7 @@ const NavContainer = styled.nav`
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	background-color: transparent;
+	background-color: ${(props) => (props.light ? "transparent" : "#fff")};
 
 	border-top: 1px solid #00000022;
 

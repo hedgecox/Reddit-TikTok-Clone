@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import RandomItem from "../utils/RandomItem";
 
 const DiscoverContainer = styled.div`
 	padding: 0 10px;
+	margin-bottom: 50px;
 `;
 
 const Topic = styled(Link)`
@@ -25,7 +27,7 @@ const DiscoverTitle = styled.h3`
 	margin: 0;
 	color: #333;
 	font-size: 1.4em;
-	margin: 7px 0;
+	margin-top: 7px;
 `;
 
 const SubIcon = styled.span`
@@ -42,21 +44,42 @@ const SubIcon = styled.span`
 	font-weight: 700;
 `;
 
-const Topics = ["Art", "Sketchpad", "Cats", "Pic", "SkyPorn", "AstroPhotography", "itookapicture"];
-const TopicColours = ["#edcc68", "#ed8368", "#6892ed", "#be68ed", "#a1d676", "#d77ed9", "#cc6060"];
+const SearchBox = styled.input`
+	width: 100%;
+	padding: 8px;
+	margin: 5px 0;
+	border: none;
+	background-color: #cccccc44;
+	border-radius: 4px;
+	position: relative;
+`;
+
+const Topics = ["Art", "Sketchpad", "Cats", "Pic", "SkyPorn", "AstroPhotography", "itookapicture", "Pics", "ArtJunkie"];
+const TopicColours = ["#edcc68", "#ed8368", "#6892ed", "#be68ed", "#a1d676", "#d77ed9", "#cc6060", "#56b06e", "#379472", "#e3dd3b"];
 
 const Discover = () => {
+	const [searchQ, setSearchQ] = useState("");
+	const FilteredTopics = Topics.filter((i) => i.toLowerCase().indexOf(searchQ.toLowerCase()) > -1);
+
 	return (
 		<DiscoverContainer>
 			<DiscoverTitle>Topics</DiscoverTitle>
-			{Topics.map((i, ind) => {
+			<SearchBox placeholder="Search or Enter Sub name" value={searchQ} onChange={(e) => setSearchQ(e.target.value.replace(/[\W_]+/, ""))} />
+			{FilteredTopics.map((i, ind) => {
 				return (
 					<Topic key={ind} to={`/r/${i}`}>
-						<SubIcon color={TopicColours[ind]}>#</SubIcon>
+						<SubIcon color={RandomItem(TopicColours)}>#</SubIcon>
 						{i}
 					</Topic>
 				);
 			})}
+
+			{searchQ && (
+				<Topic to={`/r/${searchQ}`}>
+					<SubIcon color={RandomItem(TopicColours)}>?</SubIcon>
+					{searchQ}
+				</Topic>
+			)}
 		</DiscoverContainer>
 	);
 };

@@ -12,8 +12,7 @@ const Posts = (state = { _loading: false, _error: "" }, action) => {
 		case "GET_POSTS":
 			return { ...state, _loading: true };
 		case "GET_POSTS_ERROR":
-			console.log("here");
-			return { ...state, _error: action.payload };
+			return { ...state, _error: action.payload, _loading: false };
 		default:
 			return state;
 	}

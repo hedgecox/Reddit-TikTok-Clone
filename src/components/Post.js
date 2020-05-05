@@ -25,6 +25,7 @@ const PostTitle = styled.h3`
 	font-size: 1em;
 	color: #fff;
 	max-width: calc(100% - 65px);
+	text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8);
 `;
 
 const PostImage = styled.img`

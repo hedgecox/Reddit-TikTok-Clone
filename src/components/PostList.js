@@ -32,7 +32,6 @@ const PostList = (props) => {
 
 	useEffect(() => {
 		if (!Posts[Sub] && Posts._loading === false) {
-			console.log("Getting");
 			getPosts(Sub);
 		}
 
@@ -54,19 +53,19 @@ const PostList = (props) => {
 	}
 
 	const scrollStop = () => {
-		const { scrollTop, clientHeight, scrollHeight } = postContainerRef.current;
-		const itemsLeft = scrollHeight / clientHeight - scrollTop / clientHeight;
-		console.log("itemsLeft", itemsLeft);
+		if (postContainerRef.current) {
+			const { scrollTop, clientHeight, scrollHeight } = postContainerRef.current;
+			const itemsLeft = scrollHeight / clientHeight - scrollTop / clientHeight;
 
-		if (itemsLeft < 5) {
-			console.log("need more items");
-			getPosts(Sub, Posts[Sub].after);
+			if (itemsLeft < 5) {
+				console.log("need more items");
+				getPosts(Sub, Posts[Sub].after);
+			}
 		}
 	};
 
-	//console.log(items.data.children);
 	return (
-		<PostContainer onScroll={debounce(scrollStop, 50)} ref={postContainerRef} height={height}>
+		<PostContainer onScroll={debounce(scrollStop, 200)} ref={postContainerRef} height={height}>
 			{Posts[Sub].children
 				.filter((i) => i.data.post_hint === "image")
 				.map(({ data: { id, title, thumbnail, url, ups, num_comments } }) => {
