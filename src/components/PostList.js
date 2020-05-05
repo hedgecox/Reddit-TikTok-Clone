@@ -46,7 +46,6 @@ const PostList = (props) => {
 			const itemsLeft = scrollHeight / clientHeight - scrollTop / clientHeight;
 
 			if (itemsLeft < 5) {
-				console.log("need more items");
 				getPosts(Sub, Posts[Sub].after);
 			}
 		}
