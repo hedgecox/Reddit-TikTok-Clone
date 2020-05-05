@@ -67,7 +67,7 @@ const PostList = (props) => {
 			{FilteredPosts.map(({ data: { id, title, thumbnail, url, ups, num_comments } }) => {
 				return <Post key={id} title={title} thumbnail={thumbnail} url={url} ups={ups} num_comments={num_comments} />;
 			})}
-			<Loading />
+			{Posts._loading && <Loading />}
 		</PostContainer>
 	);
 };
