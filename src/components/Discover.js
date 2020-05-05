@@ -52,6 +52,7 @@ const SearchBox = styled.input`
 	background-color: #cccccc44;
 	border-radius: 4px;
 	position: relative;
+	font-size: 16px;
 `;
 
 const Topics = ["Art", "Sketchpad", "Cats", "Pic", "SkyPorn", "AstroPhotography", "itookapicture", "Pics", "ArtJunkie"];
