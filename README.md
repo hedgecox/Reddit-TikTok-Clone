@@ -12,8 +12,8 @@ Basic Reddit clone designed for mobile (based on TikTok app design May 2020) but
 ## Build With
 
 -   React [(Create React App)](https://github.com/facebook/create-react-app)
--   Redux
--   Redux Thunk
+-   Redux           (todo)
+-   Redux Thunk     (replace with Context, React Query)
 -   Styled Components
 -   CSS ScrollSnap for Post swiping
 
